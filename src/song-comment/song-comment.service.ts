@@ -12,34 +12,41 @@ export class SongCommentService {
     private readonly songCommentRepository: Repository<SongComment>,
   ) {}
 
-  create(createSongCommentDto: CreateSongCommentDto) {
-    const time = new Date();
 
-    const songComment = new SongComment();
-    songComment.source = createSongCommentDto.source;
-    songComment.comment = createSongCommentDto.comment;
-    songComment.extraComment = createSongCommentDto?.extraComment || "";
-    songComment.externalId = createSongCommentDto.externalId;
-    songComment.creation = time;
-    songComment.modification = time;
-    songComment.type = createSongCommentDto.type;
-    return this.songCommentRepository.save(songComment);
-  }
+  // // 调用 ali SDK ，生成支付链接
+  // createAlipayUrl(createAlipayUrlDto: CreateAlipayUrlDto){
+  //
+  // }
 
-  findAll() {
-    return `This action returns all songComment`;
-  }
 
-  findOne(id: number) {
-    return `This action returns a #${id} songComment`;
-  }
-
-  update(id: number, updateSongCommentDto: UpdateSongCommentDto) {
-    return `This action updates a #${id} songComment`;
-  }
-
-  remove(externalId: string) {
-    const deleteSQL = `DELETE FROM song_comment WHERE externalId = "${externalId}";`
-    return this.songCommentRepository.query(deleteSQL)
-  }
+  // create(createSongCommentDto: CreateSongCommentDto) {
+  //   const time = new Date();
+  //
+  //   const songComment = new SongComment();
+  //   songComment.source = createSongCommentDto.source;
+  //   songComment.comment = createSongCommentDto.comment;
+  //   songComment.extraComment = createSongCommentDto?.extraComment || "";
+  //   songComment.externalId = createSongCommentDto.externalId;
+  //   songComment.creation = time;
+  //   songComment.modification = time;
+  //   songComment.type = createSongCommentDto.type;
+  //   return this.songCommentRepository.save(songComment);
+  // }
+  //
+  // findAll() {
+  //   return `This action returns all songComment`;
+  // }
+  //
+  // findOne(id: number) {
+  //   return `This action returns a #${id} songComment`;
+  // }
+  //
+  // update(id: number, updateSongCommentDto: UpdateSongCommentDto) {
+  //   return `This action updates a #${id} songComment`;
+  // }
+  //
+  // remove(externalId: string) {
+  //   const deleteSQL = `DELETE FROM song_comment WHERE externalId = "${externalId}";`
+  //   return this.songCommentRepository.query(deleteSQL)
+  // }
 }
