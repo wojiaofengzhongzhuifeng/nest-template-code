@@ -1,1 +1,5 @@
-export class CreateGoodTypeDto {}
+export class CreateGoodTypeDto {
+  name: string
+  price: number
+  consoleTypeId: number
+}

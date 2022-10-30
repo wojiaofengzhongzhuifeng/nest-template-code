@@ -6,7 +6,7 @@ import { ConsoleType } from "./entities/console-type.entity";
 
 @Module({
   controllers: [ConsoleTypeController],
-  providers: [ConsoleTypeService],
   imports: [TypeOrmModule.forFeature([ConsoleType])],
+  providers: [ConsoleTypeService],
 })
 export class ConsoleTypeModule {}

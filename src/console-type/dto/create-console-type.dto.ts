@@ -1,1 +1,3 @@
-export class CreateConsoleTypeDto {}
+export class CreateConsoleTypeDto {
+  name: string
+}
