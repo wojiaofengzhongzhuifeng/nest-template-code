@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
 import { GoodTypeService } from './good-type.service';
 import { CreateGoodTypeDto } from './dto/create-good-type.dto';
 import { UpdateGoodTypeDto } from './dto/update-good-type.dto';
@@ -13,13 +13,9 @@ export class GoodTypeController {
   }
 
   @Get()
-  findAll() {
-    return this.goodTypeService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.goodTypeService.findOne(+id);
+  findByConsoleTypeId(@Query() query: any) {
+    const {consoleTypeId} = query
+    return this.goodTypeService.findByConsoleTypeId(+consoleTypeId);
   }
 
   @Patch(':id')

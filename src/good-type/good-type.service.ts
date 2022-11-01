@@ -34,6 +34,17 @@ export class GoodTypeService {
     }
   }
 
+  async findByConsoleTypeId(consoleTypeId: number) {
+    try {
+      const result = await this.goodTypeRepository.findBy({ consoleTypeId })
+
+
+      return { ...baseResponse, data: result }
+    } catch (e) {
+      return { ...baseResponse, result: Result.error, message: e }
+    }
+  }
+
   findAll() {
     return `This action returns all goodType`;
   }

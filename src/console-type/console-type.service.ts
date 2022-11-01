@@ -29,8 +29,15 @@ export class ConsoleTypeService {
     }
   }
 
-  findAll() {
-    return `This action returns all consoleType`;
+  async findAll() {
+    try {
+      const result = await this.consoleTypeRepository.find()
+      console.log('result', result);
+      return { ...baseResponse, data: result }
+    } catch (e) {
+      return { ...baseResponse, result: Result.error, message: e }
+    }
+
   }
 
   findOne(id: number) {

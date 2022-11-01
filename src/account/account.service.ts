@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Get, Injectable, Param } from "@nestjs/common";
 import { CreateAccountDto } from "./dto/create-account.dto";
 import { UpdateAccountDto } from "./dto/update-account.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -35,8 +35,17 @@ export class AccountService {
     }
   }
 
-  findAll() {
-    return `This action returns all account`;
+  async findByGoodTypeId(goodTypeId) {
+    try{
+      // const result = await this.accountRepository.findAndCount({skip: 0,take:1})
+      const result = await this.accountRepository.findBy({goodTypeId})
+
+
+
+      return {...baseResponse, data: result}
+    }catch (e){
+      return {...baseResponse, result: Result.error, message: e}
+    }
   }
 
   findOne(id: number) {

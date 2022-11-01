@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
@@ -11,15 +11,20 @@ export class AccountController {
   create(@Body() createAccountDto: CreateAccountDto) {
     return this.accountService.create(createAccountDto);
   }
-
   @Get()
-  findAll() {
-    return this.accountService.findAll();
+  find(){
+    return "test123321"
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.accountService.findOne(+id);
+  // @Get()
+  // findAll() {
+  //   return this.accountService.findByGoodId(g);
+  // }
+
+  @Get()
+  findByGoodTypeId(@Query() query: any) {
+    const {goodTypeId} = query
+    return this.accountService.findByGoodTypeId(+goodTypeId);
   }
 
   @Patch(':id')
