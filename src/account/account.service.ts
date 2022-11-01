@@ -13,7 +13,7 @@ export class AccountService {
     @InjectRepository(Account)
     private readonly accountRepository: Repository<Account>,
   ) {}
-  async create(createAccountDto: CreateAccountDto): Promise<BaseResponse> {
+  async create(createAccountDto: CreateAccountDto): Promise<BaseResponse<any>> {
 
     // todo:特殊情况：检查 createAccountDto.goodTypeId 是否存在
     // const goodTypeId = createAccountDto.goodTypeId

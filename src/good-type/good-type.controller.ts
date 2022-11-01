@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestj
 import { GoodTypeService } from './good-type.service';
 import { CreateGoodTypeDto } from './dto/create-good-type.dto';
 import { UpdateGoodTypeDto } from './dto/update-good-type.dto';
+import { BaseResponse } from "../common/entities/common-response";
+import { GoodTypeVo } from "./vo/good-type.vo";
 
 @Controller('good-type')
 export class GoodTypeController {
@@ -12,8 +14,9 @@ export class GoodTypeController {
     return this.goodTypeService.create(createGoodTypeDto);
   }
 
+  // todo 核心接口，仔细检查逻辑
   @Get()
-  findByConsoleTypeId(@Query() query: any) {
+  findByConsoleTypeId(@Query() query: any):Promise<BaseResponse<GoodTypeVo[]>> {
     const {consoleTypeId} = query
     return this.goodTypeService.findByConsoleTypeId(+consoleTypeId);
   }

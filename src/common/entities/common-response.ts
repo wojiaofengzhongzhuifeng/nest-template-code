@@ -7,13 +7,13 @@ export enum Result{
   error = 'error'
 }
 
-export interface BaseResponse{
+export interface BaseResponse<T>{
   result: Result,
-  data: any,
+  data: T,
   message: string
 }
 
-export const baseResponse:BaseResponse = {
+export const baseResponse:BaseResponse<any> = {
   result: Result.ok,
   data: null,
   message: ''

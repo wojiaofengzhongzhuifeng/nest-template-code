@@ -4,7 +4,8 @@ import { UpdateGoodTypeDto } from "./dto/update-good-type.dto";
 import { GoodType } from "./entities/good-type.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { baseResponse, Result } from "../common/entities/common-response";
+import { BaseResponse, baseResponse, Result } from "../common/entities/common-response";
+import { GoodTypeVo } from "./vo/good-type.vo";
 
 @Injectable()
 export class GoodTypeService {
@@ -34,11 +35,20 @@ export class GoodTypeService {
     }
   }
 
-  async findByConsoleTypeId(consoleTypeId: number) {
+  async findByConsoleTypeId(consoleTypeId: number):Promise<BaseResponse<GoodTypeVo[]>> {
     try {
-      const result = await this.goodTypeRepository.findBy({ consoleTypeId })
+      const sql = `
+          SELECT
+              good_type.id,
+              good_type.creation,
+              good_type.name,
+              good_type.price,
+              count(*) as remainAmount
+          FROM good_type INNER JOIN account ON account.goodTypeId = good_type.id where good_type.consoleTypeId = ${consoleTypeId} and account.owner = "" group by id;
+      `
+      const result = await this.goodTypeRepository.query(sql);
 
-
+      // todo result 是对象数据，对象内部的 remainAmount 是 string 类型，期待修改为number类型
       return { ...baseResponse, data: result }
     } catch (e) {
       return { ...baseResponse, result: Result.error, message: e }
