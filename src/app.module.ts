@@ -22,9 +22,11 @@ import { GoodTypeModule } from './good-type/good-type.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
+      // todo 环境变量
       password: 'raojiajun111',
       database: 'account_sell',
       autoLoadEntities: true,
+      // todo 环境变量
       synchronize: true, // todo 生产环境设置为 false
     }),
     SongCommentModule,
@@ -32,7 +34,7 @@ import { GoodTypeModule } from './good-type/good-type.module';
     AccountModule,
     OrderModule,
     ConsoleTypeModule,
-    GoodTypeModule
+    GoodTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService, SongMetaProxy, GeniusLyricInfoProxy, YoutubeSdkProxy],
