@@ -33,7 +33,8 @@ export class GoodTypeService {
     createGoodType.creation = date
     createGoodType.modification = date
     createGoodType.name = createGoodTypeDto.name
-    createGoodType.price = createGoodTypeDto.price
+    // 保存金额，扩大100倍
+    createGoodType.price = createGoodTypeDto.price * 100
     createGoodType.consoleTypeId = createGoodTypeDto.consoleTypeId
 
     try {
@@ -56,12 +57,12 @@ export class GoodTypeService {
           FROM good_type INNER JOIN account ON account.goodTypeId = good_type.id where good_type.consoleTypeId = ${consoleTypeId} and account.owner = "" group by id;
       `
       const tempResult = await this.goodTypeRepository.query(sql);
-      // 将 remainAmount string => number
+      // 将 remainAmount string => number + 对price 整除 100
       const result = tempResult.map((obj)=>{
         const resultItem = {}
         Object.keys(obj).forEach((key)=>{
           if(!isNaN(obj[key])){
-            resultItem[key] = Number(obj[key])
+            resultItem[key] = key === 'price' ? Number(obj[key]) / 100 : Number(obj[key])
           } else {
             resultItem[key] = obj[key]
           }

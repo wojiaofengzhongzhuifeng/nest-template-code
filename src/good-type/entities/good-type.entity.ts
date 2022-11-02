@@ -7,7 +7,7 @@ export class GoodType extends BaseEntity{
   @Column()
   name: string
 
-  // todo 支持两位小数金额
+  // 注意： 这个字段保存的实际金额 * 100 ，如现实情况是 12.13 元，保存到数据库的数据为 1213
   @Column()
   price: number
 
