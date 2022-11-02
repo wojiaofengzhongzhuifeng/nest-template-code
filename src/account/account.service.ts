@@ -49,7 +49,7 @@ export class AccountService {
     }
   }
 
-  async updateAccountOwner(buyGoodTypeDto: BuyGoodTypeDto){
+  async updateAccountOwner(buyGoodTypeDto: BuyGoodTypeDto): Promise<{id: number, info: string}[]>{
     const { goodTypeId, wantByNumber, email } = buyGoodTypeDto
 
     const affectIdSql = `

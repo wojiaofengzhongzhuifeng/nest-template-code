@@ -36,10 +36,6 @@ export class GoodTypeController {
   @Patch('buy')
   buyGood(@Body() buyGood: BuyGoodTypeDto){
     // 检查请求参数：
-    const {goodTypeId, email, wantByNumber} = buyGood
-    if(email.length <5){
-      throw new BadRequestException("email is invalid");
-    }
     return this.goodTypeService.buyGood(buyGood)
   }
 

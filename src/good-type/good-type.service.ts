@@ -55,9 +55,21 @@ export class GoodTypeService {
               count(*) as remainAmount
           FROM good_type INNER JOIN account ON account.goodTypeId = good_type.id where good_type.consoleTypeId = ${consoleTypeId} and account.owner = "" group by id;
       `
-      const result = await this.goodTypeRepository.query(sql);
+      const tempResult = await this.goodTypeRepository.query(sql);
+      // 将 remainAmount string => number
+      const result = tempResult.map((obj)=>{
+        const resultItem = {}
+        Object.keys(obj).forEach((key)=>{
+          if(!isNaN(obj[key])){
+            resultItem[key] = Number(obj[key])
+          } else {
+            resultItem[key] = obj[key]
+          }
+        })
+        return resultItem
+      })
 
-      // todo result 是对象数据，对象内部的 remainAmount 是 string 类型，期待修改为number类型
+
       return { ...baseResponse, data: result }
     } catch (e) {
       return { ...baseResponse, result: Result.error, message: e }
@@ -66,7 +78,7 @@ export class GoodTypeService {
 
   async buyGood(buyGoodTypeDto: BuyGoodTypeDto) {
     try {
-      const { goodTypeId, wantByNumber, email } = buyGoodTypeDto
+      const { goodTypeId, wantByNumber } = buyGoodTypeDto
 
       const remainGoodTypeNumberSql = `
           SELECT good_type.id,
@@ -79,16 +91,17 @@ export class GoodTypeService {
       `
       const remainGoodTypeNumberResult = await this.goodTypeRepository.query(remainGoodTypeNumberSql)
 
-      if(remainGoodTypeNumberResult.length !== 1 ){throw new Error(codeMap.goodType存在相同数据id)}
-      if(wantByNumber > remainGoodTypeNumberResult[0].remainAmount ){throw new Error(codeMap.购买good数量超出最大库存)}
+      if(remainGoodTypeNumberResult.length === 0){throw new Error(codeMap.购买good数量超出最大库存)}
+      if(remainGoodTypeNumberResult.length > 1 ){throw new Error(codeMap.goodType存在相同数据id)}
+      if(wantByNumber > Number(remainGoodTypeNumberResult[0].remainAmount) ){throw new Error(codeMap.购买good数量超出最大库存)}
 
       // todo 接入支付宝接口
       await this.alipay()
       const updateResult = await this.accountService.updateAccountOwner(buyGoodTypeDto)
       return {...baseResponse, data: updateResult}
-    } catch (errorCode) {
-      const message = this.getKeyByValue(codeMap, errorCode)
-      return {...baseResponse, code: errorCode, Result: Result.error, message}
+    } catch (error) {
+      const message = this.getKeyByValue(codeMap, error.message)
+      return {...baseResponse, code: error.message, result: Result.error, message}
     }
   }
 
