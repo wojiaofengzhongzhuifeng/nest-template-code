@@ -1,14 +1,23 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { CreateGoodTypeDto } from "./dto/create-good-type.dto";
 import { UpdateGoodTypeDto } from "./dto/update-good-type.dto";
 import { GoodType } from "./entities/good-type.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { BaseResponse, baseResponse, Result } from "../common/entities/common-response";
+import {
+  BaseResponse,
+  baseResponse,
+  codeMap,
+  Result
+} from "../common/entities/common-response";
 import { GoodTypeVo } from "./vo/good-type.vo";
+import { BuyGoodTypeDto } from "./dto/buy-good-type.dto";
+import { AccountService } from "../account/account.service";
 
 @Injectable()
 export class GoodTypeService {
+  @Inject(AccountService)
+  private readonly accountService: AccountService;
 
   constructor(
     @InjectRepository(GoodType)
@@ -55,19 +64,49 @@ export class GoodTypeService {
     }
   }
 
-  findAll() {
-    return `This action returns all goodType`;
+  async buyGood(buyGoodTypeDto: BuyGoodTypeDto) {
+    try {
+      const { goodTypeId, wantByNumber, email } = buyGoodTypeDto
+
+      const remainGoodTypeNumberSql = `
+          SELECT good_type.id,
+                 count(*) as remainAmount
+          FROM good_type
+                   INNER JOIN account ON account.goodTypeId = good_type.id
+          where good_type.consoleTypeId = ${goodTypeId}
+            and account.owner = ""
+          group by id;
+      `
+      const remainGoodTypeNumberResult = await this.goodTypeRepository.query(remainGoodTypeNumberSql)
+
+      if(remainGoodTypeNumberResult.length !== 1 ){throw new Error(codeMap.goodType存在相同数据id)}
+      if(wantByNumber > remainGoodTypeNumberResult[0].remainAmount ){throw new Error(codeMap.购买good数量超出最大库存)}
+
+      // todo 接入支付宝接口
+      await this.alipay()
+      const updateResult = await this.accountService.updateAccountOwner(buyGoodTypeDto)
+      return {...baseResponse, data: updateResult}
+    } catch (errorCode) {
+      const message = this.getKeyByValue(codeMap, errorCode)
+      return {...baseResponse, code: errorCode, Result: Result.error, message}
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} goodType`;
+  alipay(){
+    return new Promise((resolve, reject)=>{
+      setTimeout(()=>{
+        resolve(1)
+        let math = Math.random()
+        if(math >=0.5){
+          resolve(math)
+        } else {
+          reject(math)
+        }
+      }, 1000)
+    })
   }
 
-  update(id: number, updateGoodTypeDto: UpdateGoodTypeDto) {
-    return `This action updates a #${id} goodType`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} goodType`;
+  getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value) || 'unknown error';
   }
 }

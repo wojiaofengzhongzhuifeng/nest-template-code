@@ -2,12 +2,9 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HttpModule } from "@nestjs/axios";
-import { SongMetaProxy } from "./common/utils/song-meta-proxy";
-import { GeniusLyricInfoProxy } from "./common/utils/genius-lyric-info-proxy";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { SongCommentModule } from './song-comment/song-comment.module';
 import { ScheduleModule } from "@nestjs/schedule";
-import { YoutubeSdkProxy } from "./common/utils/youtube-sdk-proxy";
 import { Repository } from "typeorm";
 import { AccountModule } from './account/account.module';
 import { OrderModule } from './order/order.module';
@@ -37,6 +34,6 @@ import { GoodTypeModule } from './good-type/good-type.module';
     GoodTypeModule,
   ],
   controllers: [AppController],
-  providers: [AppService, SongMetaProxy, GeniusLyricInfoProxy, YoutubeSdkProxy],
+  providers: [AppService],
 })
 export class AppModule {}

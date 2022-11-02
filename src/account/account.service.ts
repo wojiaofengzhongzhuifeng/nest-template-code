@@ -5,6 +5,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Account } from "./entities/account.entity";
 import { baseResponse, BaseResponse, Result } from "../common/entities/common-response";
+import { BuyGoodTypeDto } from "../good-type/dto/buy-good-type.dto";
 
 @Injectable()
 export class AccountService {
@@ -46,6 +47,24 @@ export class AccountService {
     }catch (e){
       return {...baseResponse, result: Result.error, message: e}
     }
+  }
+
+  async updateAccountOwner(buyGoodTypeDto: BuyGoodTypeDto){
+    const { goodTypeId, wantByNumber, email } = buyGoodTypeDto
+
+    const affectIdSql = `
+      SELECT id, info from account WHERE goodTypeId=${goodTypeId} and OWNER = '' LIMIT ${wantByNumber};
+    `
+    const affectIdSqlResult = await this.accountRepository.query(affectIdSql)
+    const needUpdateAccountIdListString = affectIdSqlResult.map((item)=>item.id).join(',')
+
+    const accountWithNoOwnerSql = `
+        UPDATE account SET owner = '${email}' WHERE id in (${needUpdateAccountIdListString});
+    `
+    const updateAccountResult = await this.accountRepository.query(accountWithNoOwnerSql)
+    if(updateAccountResult.affectedRows !== wantByNumber){throw new Error("更新owner出现错误")}
+
+    return affectIdSqlResult
   }
 
   findOne(id: number) {
