@@ -20,10 +20,10 @@ import { GoodTypeModule } from './good-type/good-type.module';
       port: 3306,
       username: 'root',
       // todo 环境变量
-      password: 'raojiajun111',
+      password: '$Raojiajun123+!',
       database: 'account_sell',
       autoLoadEntities: true,
-      synchronize: true, // todo 生产环境设置为 false
+      synchronize: false, // todo 生产环境设置为 false
     }),
     SongCommentModule,
     ScheduleModule.forRoot(),

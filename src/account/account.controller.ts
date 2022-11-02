@@ -13,7 +13,7 @@ export class AccountController {
   }
   @Get()
   find(){
-    return "test123321"
+    return "2022年11月02日18:04:25"
   }
 
   // @Get()
