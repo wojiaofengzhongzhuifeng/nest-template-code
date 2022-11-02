@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  BadRequestException
+} from "@nestjs/common";
 import { GoodTypeService } from './good-type.service';
 import { CreateGoodTypeDto } from './dto/create-good-type.dto';
 import { UpdateGoodTypeDto } from './dto/update-good-type.dto';
@@ -15,7 +25,7 @@ export class GoodTypeController {
     return this.goodTypeService.create(createGoodTypeDto);
   }
 
-  // todo 核心接口，仔细检查逻辑
+  // todo 核心接口: 商品信息+库存列表，仔细检查逻辑
   @Get()
   findByConsoleTypeId(@Query() query: any):Promise<BaseResponse<GoodTypeVo[]>> {
     const {consoleTypeId} = query
@@ -25,6 +35,11 @@ export class GoodTypeController {
 
   @Patch('buy')
   buyGood(@Body() buyGood: BuyGoodTypeDto){
+    // 检查请求参数：
+    const {goodTypeId, email, wantByNumber} = buyGood
+    if(email.length <5){
+      throw new BadRequestException("email is invalid");
+    }
     return this.goodTypeService.buyGood(buyGood)
   }
 
