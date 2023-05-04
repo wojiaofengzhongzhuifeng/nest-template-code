@@ -34,7 +34,9 @@ const axios = require("axios");
 // excel文件类径
 
 
-const excelPath = path.resolve(__dirname, "./test.xlsx")
+const excelPath = path.resolve(__dirname, "./test-production.xlsx")
+
+const url = `http://121.4.27.105:3009`
 
 //解析excel, 获取到所有sheets
 const sheets = xlsx.parse(excelPath);
@@ -49,7 +51,7 @@ sheets.forEach((sheet)=>{
     sheetData.forEach((rowData, index)=>{
       if(index === 0){return}
       let promise = axios({
-        url: 'http://localhost:3009/console-type',
+        url: `${url}/console-type`,
         method: 'post',
         data: {
           name: rowData[1]
@@ -66,7 +68,7 @@ sheets.forEach((sheet)=>{
     sheetData.forEach((rowData, index)=>{
       if(index === 0){return}
       let promise = axios({
-        url: 'http://localhost:3009/good-type',
+        url: `${url}/good-type`,
         method: 'post',
         data: {
           name: rowData[1],
@@ -85,7 +87,7 @@ sheets.forEach((sheet)=>{
     sheetData.forEach((rowData, index)=>{
       if(index === 0){return}
       let promise = axios({
-        url: 'http://localhost:3009/account',
+        url: `${url}/account`,
         method: 'post',
         data: {
           info: rowData[3],

@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HttpModule } from "@nestjs/axios";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { SongCommentModule } from './song-comment/song-comment.module';
 import { ScheduleModule } from "@nestjs/schedule";
 import { Repository } from "typeorm";
 import { AccountModule } from './account/account.module';
@@ -20,12 +19,11 @@ import { GoodTypeModule } from './good-type/good-type.module';
       port: 3306,
       username: 'root',
       // todo 环境变量
-      password: '$Raojiajun123+!',
+      password: 'raojiajun111',
       database: 'account_sell',
       autoLoadEntities: true,
       synchronize: false, // todo 生产环境设置为 false
     }),
-    SongCommentModule,
     ScheduleModule.forRoot(),
     AccountModule,
     OrderModule,
