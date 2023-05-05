@@ -28,6 +28,8 @@ export class AccountService {
     createAccount.info = createAccountDto.info
     createAccount.goodTypeId = createAccountDto.goodTypeId
 
+    
+    // todo 删除这个try catch
     try {
       const result = await this.accountRepository.save(createAccount)
       return { ...baseResponse, data: result }
