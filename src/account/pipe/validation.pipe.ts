@@ -13,6 +13,7 @@ export class ValidationPipe implements PipeTransform<any> {
     // 请求参数统一校验
     // - 必须传这两个字段
     // - info 字段 长度大于10
+    // - goodTypeId 必须为数字或者数字字符串
     const {info, goodTypeId} = value
     if(!info){
       throw new RequestDataException('lack info');
@@ -22,6 +23,9 @@ export class ValidationPipe implements PipeTransform<any> {
     }
     if(info.length < 10){
       throw new RequestDataException('info length too short');
+    }
+    if(isNaN(parseInt(goodTypeId))){
+      throw new RequestDataException('goodTypeId is not number');
     }
     
     
