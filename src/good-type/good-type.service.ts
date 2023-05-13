@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import {forwardRef, Inject, Injectable} from "@nestjs/common";
 import { CreateGoodTypeDto } from "./dto/create-good-type.dto";
 import { UpdateGoodTypeDto } from "./dto/update-good-type.dto";
 import { GoodType } from "./entities/good-type.entity";
@@ -16,12 +16,16 @@ import { AccountService } from "../account/account.service";
 
 @Injectable()
 export class GoodTypeService {
-  @Inject(AccountService)
-  private readonly accountService: AccountService;
+  // @Inject(AccountService)
+  // private readonly accountService: AccountService;
 
   constructor(
     @InjectRepository(GoodType)
     private readonly goodTypeRepository: Repository<GoodType>,
+
+    @Inject(forwardRef(() => AccountService))
+    private accountService: AccountService,
+
   ) {}
 
   async create(createGoodTypeDto: CreateGoodTypeDto) {
@@ -104,6 +108,14 @@ export class GoodTypeService {
       const message = this.getKeyByValue(codeMap, error.message)
       return {...baseResponse, code: error.message, result: Result.error, message}
     }
+  }
+
+  async getGoodTypeById(goodTypeId: number): Promise<any>{
+    const sql = `
+    SELECT * FROM good_type WHERE ID = ${goodTypeId}
+    `
+    const tempResult = await this.goodTypeRepository.query(sql)
+    return tempResult
   }
 
   alipay(){

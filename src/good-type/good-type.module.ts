@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import {forwardRef, Module} from '@nestjs/common';
 import { GoodTypeService } from './good-type.service';
 import { GoodTypeController } from './good-type.controller';
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -7,8 +7,8 @@ import { AccountModule } from "../account/account.module";
 
 @Module({
   controllers: [GoodTypeController],
+  imports: [TypeOrmModule.forFeature([GoodType]), forwardRef(()=>AccountModule)],
   providers: [GoodTypeService],
-  imports: [TypeOrmModule.forFeature([GoodType]), AccountModule, ],
-
+  exports: [GoodTypeService]
 })
 export class GoodTypeModule {}

@@ -1,4 +1,4 @@
-import { Get, Injectable, Param } from "@nestjs/common";
+import {forwardRef, Get, Inject, Injectable, Param} from "@nestjs/common";
 import { CreateAccountDto } from "./dto/create-account.dto";
 import { UpdateAccountDto } from "./dto/update-account.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -6,18 +6,31 @@ import { Repository } from "typeorm";
 import { Account } from "./entities/account.entity";
 import { baseResponse, BaseResponse, Result } from "../common/entities/common-response";
 import { BuyGoodTypeDto } from "../good-type/dto/buy-good-type.dto";
+import {GoodTypeService} from "../good-type/good-type.service";
+import {isEmpty} from "../common/utils";
+import {RequestDataException} from "../custom-http-exception";
 
 @Injectable()
 export class AccountService {
 
+
   constructor(
     @InjectRepository(Account)
     private readonly accountRepository: Repository<Account>,
+
+    @Inject(forwardRef(() => GoodTypeService))
+    private goodTypeService: GoodTypeService,
   ) {}
   async create(createAccountDto: CreateAccountDto): Promise<BaseResponse<any>> {
 
-    // todo:特殊情况：检查 createAccountDto.goodTypeId 是否存在
-    // const goodTypeId = createAccountDto.goodTypeId
+    const {info, goodTypeId} = createAccountDto
+
+    let goodTypeQueryResult = await this.goodTypeService.getGoodTypeById(goodTypeId)
+
+    if(isEmpty(goodTypeQueryResult)){
+      throw new RequestDataException('goodTypeId not exist');
+    }
+
 
     const createAccount = new Account()
     const date = new Date()
@@ -25,10 +38,10 @@ export class AccountService {
     createAccount.modification = date
     createAccount.owner = ''
     createAccount.alipay = ''
-    createAccount.info = createAccountDto.info
-    createAccount.goodTypeId = createAccountDto.goodTypeId
+    createAccount.info = info
+    createAccount.goodTypeId = goodTypeId
 
-    
+
     // todo 删除这个try catch
     try {
       const result = await this.accountRepository.save(createAccount)
