@@ -1,12 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes} from '@nestjs/common';
 import { ConsoleTypeService } from './console-type.service';
 import { CreateConsoleTypeDto } from './dto/create-console-type.dto';
 import { UpdateConsoleTypeDto } from './dto/update-console-type.dto';
+import {ValidationPipe} from "./pipe/validation.pipe";
+import {TransformPipe} from "./pipe/transform.pipe";
 
 @Controller('console-type')
 export class ConsoleTypeController {
   constructor(private readonly consoleTypeService: ConsoleTypeService) {}
 
+  @UsePipes(
+      ValidationPipe,
+      TransformPipe
+  )
   @Post()
   create(@Body() createConsoleTypeDto: CreateConsoleTypeDto) {
     return this.consoleTypeService.create(createConsoleTypeDto);
