@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Account } from "../../account/entities/account.entity";
 
 export const codeMap = {
-  '业务正常': '00000',
+  '业务正常': '200',
   'goodType存在相同数据id': '00001',
   '购买good数量超出最大库存': '00002',
 }
