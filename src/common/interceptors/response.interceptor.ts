@@ -36,7 +36,7 @@ export class ResponseInterceptor<T>
     return next.handle().pipe(
       map(resp => {
         console.log('resp', resp);
-        const message = resp.message || getKeyByValue(MessageCodeMap, resp.code)
+        const message = resp.message ||'ok'
         const code = MessageCodeMap[message] || context.switchToHttp().getResponse().statusCode
         const data = resp.data
 

@@ -13,11 +13,6 @@ export class AppService {
     return { code: MessageCodeMap.ok, data: {a: 1}};
   }
 
-  // 错误响应：不推荐使用
-  getHello1(): Response1<{a: number}> {
-    return { code: MessageCodeMap.user_not_have_limit, data: null};
-  }
-
   // 错误响应：客户端出现请求错误
   getHello2(): Response1<{a: number}> {
 
@@ -31,10 +26,20 @@ export class AppService {
     throw new InternalErrorException('服务端请求错误');
   }
 
-
   // 错误响应：出现错误，并且需要在前端精确展示错误
   getHello4(): Response1<{a: number}> {
-
     throw new CustomError(MessageCodeMap.user_not_have_limit, '自定义错误');
+  }
+
+  // 使用管道来解决请求数据是否合法问题
+  getHello5(age): Response1<string> {
+
+    if(age >= 18 && age <= 30){
+      return {data: '青年'}
+    } else {
+      return {data: '非青年'}
+    }
+
+
   }
 }
