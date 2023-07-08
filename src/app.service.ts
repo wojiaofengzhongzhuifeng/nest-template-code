@@ -31,7 +31,7 @@ export class AppService {
     throw new CustomError(MessageCodeMap.user_not_have_limit, '自定义错误');
   }
 
-  // 使用管道来解决请求数据是否合法问题
+  // 使用管道，校验数据合法性，在controller 中
   getHello5(age): Response1<string> {
 
     if(age >= 18 && age <= 30){
