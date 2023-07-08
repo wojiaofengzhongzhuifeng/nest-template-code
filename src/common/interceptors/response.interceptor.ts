@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {getKeyByValue} from "../utils";
 
-export const messageCodeMap = {
+export const MessageCodeMap = {
   ok: 200,
 
   // 业务错误
@@ -36,8 +36,8 @@ export class ResponseInterceptor<T>
     return next.handle().pipe(
       map(resp => {
         console.log('resp', resp);
-        const message = resp.message || getKeyByValue(messageCodeMap, resp.code)
-        const code = messageCodeMap[message] || context.switchToHttp().getResponse().statusCode
+        const message = resp.message || getKeyByValue(MessageCodeMap, resp.code)
+        const code = MessageCodeMap[message] || context.switchToHttp().getResponse().statusCode
         const data = resp.data
 
         return {

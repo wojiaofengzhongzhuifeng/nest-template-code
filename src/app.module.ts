@@ -33,9 +33,12 @@ import {ResponseInterceptor} from "./common/interceptors/response.interceptor";
     GoodTypeModule,
   ],
   controllers: [AppController],
-  providers: [    {
-    provide: APP_INTERCEPTOR,
-    useClass: ResponseInterceptor,
-  },AppService],
+  providers: [
+    // 注册拦截器
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
+    }
+  ,AppService],
 })
 export class AppModule {}

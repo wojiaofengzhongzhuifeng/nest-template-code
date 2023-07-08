@@ -7,16 +7,30 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
 
-  // 正常业务响应情况
   @Get('test')
   getHello(): Response1<{a: number}> {
     return this.appService.getHello();
   }
 
 
-  // 错误情况1：业务错误
   @Get('test1')
   getHello1(): Response1<{a: number}> {
     return this.appService.getHello1();
+  }
+
+  @Get('test2')
+  getHello2(): Response1<{a: number}> {
+    return this.appService.getHello2();
+  }
+
+
+  @Get('test3')
+  getHello3(): Response1<{a: number}> {
+    return this.appService.getHello3();
+  }
+
+  @Get('test4')
+  getHello4(): Response1<{a: number}> {
+    return this.appService.getHello4();
   }
 }
