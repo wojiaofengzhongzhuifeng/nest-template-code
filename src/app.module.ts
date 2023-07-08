@@ -9,6 +9,8 @@ import { AccountModule } from './account/account.module';
 import { OrderModule } from './order/order.module';
 import { ConsoleTypeModule } from './console-type/console-type.module';
 import { GoodTypeModule } from './good-type/good-type.module';
+import {APP_INTERCEPTOR} from "@nestjs/core";
+import {ResponseInterceptor} from "./common/interceptors/response.interceptor";
 
 @Module({
   imports: [
@@ -31,6 +33,9 @@ import { GoodTypeModule } from './good-type/good-type.module';
     GoodTypeModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [    {
+    provide: APP_INTERCEPTOR,
+    useClass: ResponseInterceptor,
+  },AppService],
 })
 export class AppModule {}
