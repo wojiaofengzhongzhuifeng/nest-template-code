@@ -8,6 +8,10 @@ import {APP_INTERCEPTOR} from "@nestjs/core";
 import {ResponseInterceptor} from "./common/interceptors/response.interceptor";
 import { ProductModule } from './product/product.module';
 import {Product} from "./product/entities/product.entity";
+import { AuthorModule } from './author/author.module';
+import { BookModule } from './book/book.module';
+import {Author} from "./author/entities/author.entity";
+import {Book} from "./book/entities/book.entity";
 
 @Module({
   imports: [
@@ -22,10 +26,12 @@ import {Product} from "./product/entities/product.entity";
       database: 'learn_nest',
       autoLoadEntities: true,
       synchronize: true, // todo 生产环境设置为 false
-      entities: [Product],
+      entities: [Product, Author, Book],
     }),
     ScheduleModule.forRoot(),
     ProductModule,
+    AuthorModule,
+    BookModule,
   ],
   controllers: [AppController],
   providers: [
