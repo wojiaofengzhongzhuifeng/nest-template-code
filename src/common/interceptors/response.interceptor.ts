@@ -38,7 +38,7 @@ export class ResponseInterceptor<T>
         console.log('resp', resp);
         const message = resp.message ||'ok'
         const code = MessageCodeMap[message] || context.switchToHttp().getResponse().statusCode
-        const data = resp.data
+        const data = resp.data || resp
 
         return {
           code,

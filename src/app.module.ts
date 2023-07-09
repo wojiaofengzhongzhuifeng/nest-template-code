@@ -4,13 +4,10 @@ import { AppService } from './app.service';
 import { HttpModule } from "@nestjs/axios";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ScheduleModule } from "@nestjs/schedule";
-import { Repository } from "typeorm";
-import { AccountModule } from './account/account.module';
-import { OrderModule } from './order/order.module';
-import { ConsoleTypeModule } from './console-type/console-type.module';
-import { GoodTypeModule } from './good-type/good-type.module';
 import {APP_INTERCEPTOR} from "@nestjs/core";
 import {ResponseInterceptor} from "./common/interceptors/response.interceptor";
+import { ProductModule } from './product/product.module';
+import {Product} from "./product/entities/product.entity";
 
 @Module({
   imports: [
@@ -22,15 +19,13 @@ import {ResponseInterceptor} from "./common/interceptors/response.interceptor";
       username: 'root',
       // todo 环境变量
       password: 'raojiajun111',
-      database: 'account_sell',
+      database: 'learn_nest',
       autoLoadEntities: true,
-      synchronize: false, // todo 生产环境设置为 false
+      synchronize: true, // todo 生产环境设置为 false
+      entities: [Product],
     }),
     ScheduleModule.forRoot(),
-    AccountModule,
-    OrderModule,
-    ConsoleTypeModule,
-    GoodTypeModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [
