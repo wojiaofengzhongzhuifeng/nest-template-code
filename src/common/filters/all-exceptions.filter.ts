@@ -27,23 +27,37 @@ export class AllExceptionsFilter implements ExceptionFilter {
       code = exception.messageCode;
     } else if (exception instanceof HttpException) {
 
-      console.log('exception HttpException', exception);
-
+      console.log('exception HttpException', JSON.stringify(exception));
       /*
-      {
-      response =
-        "statusCode": 400,
-        "message": [
-           "price must be a number conforming to the specified constraints"
-        ],
-        "error": "Bad Request"
-        }
-      */
-      // todo 确认exception.getResponse() 的数据结构是为 {statusCode: number,message: string[], error: string}？
-      const response = exception.getResponse() as {statusCode: number,message: string[], error: string}
-      status = response.statusCode;
-      message = response.message[0] as string;
-      code = status;
+      * exception HttpException 情况1
+      {"response":"无法找到authorId 2 的数据","status":400,"message":"无法找到authorId 2 的数据","name":"RequestException"}
+      *
+      * exception HttpException 情况2
+      {"response":{"statusCode":400,"message":["title must be a string"],"error":"Bad Request"},"status":400,"message":"Bad Request Exception","name":"BadRequestException"}
+
+      * */
+
+      // @ts-ignore
+      if(typeof exception.response  === 'object'){
+        const response = exception.getResponse()
+        // @ts-ignore
+        status = response.statusCode
+        // @ts-ignore
+        message = response.message[0]
+        code = status
+      } else {
+        // 说明是class-validator 的错误类型
+        // @ts-ignore
+        status = exception.status;
+        // @ts-ignore
+        message = exception.response as string;
+        code = status;
+
+      }
+
+
+
+
     } else {
       console.log('exception other', exception);
       status = HttpStatus.INTERNAL_SERVER_ERROR;
