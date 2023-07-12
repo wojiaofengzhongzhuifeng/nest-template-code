@@ -13,11 +13,11 @@ export class AuthorController {
     return this.authorService.create(createAuthorDto);
   }
 
-
-  // 分页查询作者信息，查询非 book 的数据
   /*
   * 注意点：
-  * 1. 从 page = 1 开始
+  * - 分页查询作者信息，查询非 book 的数据
+  * - 请求方式 http://localhost:3009/author?page=2&limit=5
+  * - 从 page = 1 开始
   *
   * */
   @Get()
@@ -29,4 +29,14 @@ export class AuthorController {
     return this.authorService.findPagination((page), (limit));
   }
 
+  /*
+  *
+  * 注意点：
+  * - 获取作者的详情
+  * - 请求方式 http://localhost:3009/author/:authorId
+  * */
+  @Get(':authorId')
+  async getInfoById(@Param('authorId') authorId: number){
+    return this.authorService.getInfoById(authorId);
+  }
 }
