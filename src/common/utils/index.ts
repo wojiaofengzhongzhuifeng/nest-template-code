@@ -1,3 +1,5 @@
+import {Repository} from "typeorm";
+
 export function getKeyByValue(object, value) {
   return Object.keys(object).find(key => object[key] === value) || 'unknown error';
 }
@@ -18,3 +20,32 @@ export function isEmpty(value) {
   return false;
 }
 
+
+
+/**
+ * typeorm 封装分页方法
+ *
+ * @param {Object} repositoryObj - typeorm 的 obj
+ * @param {string} entityString -
+ * @param {number} page - 页码
+ * @param {number} limit - 每页数量
+ * @returns {Promise}
+ */
+export async function queryEntityPagination<T>(
+  repositoryObj: Repository<T>,
+  entityString: string,
+  page: number,
+  limit: number
+): Promise<[T[], number]> {
+  try {
+    const response = await repositoryObj
+      .createQueryBuilder(entityString)
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+    return response;
+  } catch (error) {
+    console.log('请求分页数据出现错误error', error);
+    throw error;
+  }
+}

@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, Query} from '@nestjs/common';
 import { AuthorService } from './author.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
+import {PaginationPipe} from "../common/pipes/pagination.pipe";
 
 @Controller('author')
 export class AuthorController {
@@ -12,23 +13,20 @@ export class AuthorController {
     return this.authorService.create(createAuthorDto);
   }
 
+
+  // 分页查询作者信息，查询非 book 的数据
+  /*
+  * 注意点：
+  * 1. 从 page = 1 开始
+  *
+  * */
   @Get()
-  findAll() {
-    return this.authorService.findAll();
+  findPagination(
+    @Query(new PaginationPipe()) {page, limit}: { page: number; limit: number },
+  ) {
+    console.log('test', typeof limit, page);
+
+    return this.authorService.findPagination((page), (limit));
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authorService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthorDto: UpdateAuthorDto) {
-    return this.authorService.update(+id, updateAuthorDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authorService.remove(+id);
-  }
 }

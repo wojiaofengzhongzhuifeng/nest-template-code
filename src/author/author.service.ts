@@ -5,6 +5,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Product} from "../product/entities/product.entity";
 import {Repository} from "typeorm";
 import {Author} from "./entities/author.entity";
+import {queryEntityPagination} from "../common/utils";
 
 @Injectable()
 export class AuthorService {
@@ -19,19 +20,10 @@ export class AuthorService {
     return sqlResult
   }
 
-  findAll() {
-    return `This action returns all author`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} author`;
-  }
-
-  update(id: number, updateAuthorDto: UpdateAuthorDto) {
-    return `This action updates a #${id} author`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} author`;
+  async findPagination(page: number, limit: number): Promise<{ items: Author[], total }> {
+    console.log('page', page);
+    console.log('limit', limit);
+    const [items, total] = await queryEntityPagination<Author>(this.authorRepository, 'author', page, limit)
+    return {items, total}
   }
 }
