@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import {InjectRepository} from "@nestjs/typeorm";
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 import {Author} from "../author/entities/author.entity";
 import {Repository} from "typeorm";
 import {Book} from "./entities/book.entity";
@@ -16,6 +17,9 @@ export class BookService {
 
     @InjectRepository(Author)
     private authorRepository: Repository<Author>,
+
+    private readonly elasticsearchService: ElasticsearchService
+
   ) {}
 
 
@@ -33,7 +37,11 @@ export class BookService {
     }
     book.author = author;
 
-    return this.bookRepository.save(book)
+    console.log('book 1111', book);
+
+    const sageSqlResult = this.bookRepository.save(book)
+    console.log('sageSqlResult', sageSqlResult);
+    return sageSqlResult
   }
 
   findAll() {
@@ -51,4 +59,15 @@ export class BookService {
   remove(id: number) {
     return `This action removes a #${id} book`;
   }
+
+  // async addToElasticsearchIndex(blog: Book) {
+  //   await this.elasticsearchService.index({
+  //     index: 'book',
+  //     id: String(blog.id),
+  //     body: {
+  //       title: blog.title,
+  //       content: blog.content,
+  //     },
+  //   });
+  // }
 }
