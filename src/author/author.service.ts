@@ -14,6 +14,7 @@ export class AuthorService {
   constructor(
     @InjectRepository(Author)
     private authorRepository: Repository<Author>,
+
   ) {}
 
   create(createAuthorDto: CreateAuthorDto) {
@@ -29,11 +30,11 @@ export class AuthorService {
   }
 
   async getInfoById(id: number){
+
     const author = await this.authorRepository.findOne({
-      where: {
-        id
-      }
-    })
+      where: { id },
+      relations: ['books'],
+    });
 
     if(!author){
       throw new RequestException('无法根据 authorId 找到数据')
