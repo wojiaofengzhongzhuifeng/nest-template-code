@@ -41,4 +41,22 @@ export class AuthorService {
     }
     return author
   }
+
+  async updateById(id: number, updateAuthorDto: UpdateAuthorDto){
+    const author = await this.authorRepository.findOne({
+      where: {id}
+    })
+
+    if(!author) throw new RequestException(`authorId: ${id} 无法找到作者`);
+
+    let updatedAuthor = {...author, ...updateAuthorDto}
+
+    const saveResult = await this.authorRepository.save(updatedAuthor)
+
+    console.log('saveResult', saveResult);
+
+    return saveResult
+
+
+  }
 }

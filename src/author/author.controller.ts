@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, Query} from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, Query, Put} from '@nestjs/common';
 import { AuthorService } from './author.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
@@ -38,5 +38,13 @@ export class AuthorController {
   @Get(':authorId')
   async getInfoById(@Param('authorId') authorId: number){
     return this.authorService.getInfoById(authorId);
+  }
+
+  @Put(':authorId')
+  async updateById(
+    @Param('authorId') authorId: number,
+    @Body() updateAuthorDto: UpdateAuthorDto
+  ){
+    return this.authorService.updateById(authorId, updateAuthorDto)
   }
 }
