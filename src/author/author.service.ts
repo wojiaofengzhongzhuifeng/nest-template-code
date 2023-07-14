@@ -9,6 +9,7 @@ import {queryEntityPagination} from "../common/utils";
 import {RequestException} from "../common/exceptions/request.exception";
 import {BaseService} from "../common/base-module/base.service";
 import {LoggerInterface} from "../common/log/logger.interface";
+import {CustomLogService} from "../common/custom-log/custom-log.service";
 
 @Injectable()
 export class AuthorService extends BaseService{
@@ -18,6 +19,8 @@ export class AuthorService extends BaseService{
     @InjectRepository(Author)
     private authorRepository: Repository<Author>,
     @Inject('LoggerInterface') logger: LoggerInterface,
+
+    private readonly customLog: CustomLogService
 
   ) {
     super(logger);
@@ -62,6 +65,7 @@ export class AuthorService extends BaseService{
 
     console.log('saveResult', saveResult);
     this.logger.log('saveResult 123', saveResult)
+    this.customLog.log(saveResult, "customlog")
 
     return saveResult
 
