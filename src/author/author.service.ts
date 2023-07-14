@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Inject, Injectable} from '@nestjs/common';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import {InjectRepository} from "@nestjs/typeorm";
@@ -7,15 +7,22 @@ import {Repository} from "typeorm";
 import {Author} from "./entities/author.entity";
 import {queryEntityPagination} from "../common/utils";
 import {RequestException} from "../common/exceptions/request.exception";
+import {BaseService} from "../common/base-module/base.service";
+import {LoggerInterface} from "../common/log/logger.interface";
 
 @Injectable()
-export class AuthorService {
+export class AuthorService extends BaseService{
 
   constructor(
+
     @InjectRepository(Author)
     private authorRepository: Repository<Author>,
+    @Inject('LoggerInterface') logger: LoggerInterface,
 
-  ) {}
+  ) {
+    super(logger);
+
+  }
 
   create(createAuthorDto: CreateAuthorDto) {
     const sqlResult = this.authorRepository.save(createAuthorDto)
@@ -54,6 +61,7 @@ export class AuthorService {
     const saveResult = await this.authorRepository.save(updatedAuthor)
 
     console.log('saveResult', saveResult);
+    this.logger.log('saveResult 123', saveResult)
 
     return saveResult
 

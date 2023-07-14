@@ -12,6 +12,7 @@ import { AuthorModule } from './author/author.module';
 import { BookModule } from './book/book.module';
 import {Author} from "./author/entities/author.entity";
 import {Book} from "./book/entities/book.entity";
+import {DynamicLoggerModule} from "./common/log/dynamic-logger.module";
 
 @Module({
   imports: [
@@ -32,6 +33,11 @@ import {Book} from "./book/entities/book.entity";
     ProductModule,
     AuthorModule,
     BookModule,
+    DynamicLoggerModule.forRoot({
+      type: 'console',
+      // type: 'file',
+      // filePath: './log.txt',
+    }),
   ],
   controllers: [AppController],
   providers: [
