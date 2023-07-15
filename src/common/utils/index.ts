@@ -1,4 +1,6 @@
 import {Repository} from "typeorm";
+import {saltRounds} from "../constant";
+import * as bcrypt from 'bcrypt'
 
 export function getKeyByValue(object, value) {
   return Object.keys(object).find(key => object[key] === value) || 'unknown error';
@@ -48,4 +50,26 @@ export async function queryEntityPagination<T>(
     console.log('请求分页数据出现错误error', error);
     throw error;
   }
+}
+
+/**
+ * 将字符串保存为经过加密后的字符串
+ *
+ * @param {string} initString - 原始字符串
+ * @returns {Promise<String>>} cryptString
+ */
+export function generateHashByString(initString){
+  return new Promise((resolve, reject)=>{
+    bcrypt.hash(initString, saltRounds, function(err, hash) {
+      // 在这里，你可以使用 hash 来代替用户的明文密码，存储在数据库中
+      if(err) {
+        resolve(null)
+        console.error(err);
+        return;
+      }
+      console.log(hash); // 这就是加密后的密码
+      resolve(hash)
+    });
+
+  })
 }

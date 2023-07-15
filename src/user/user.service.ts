@@ -5,7 +5,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Product} from "../product/entities/product.entity";
 import {Repository} from "typeorm";
 import {User} from "./entities/user.entity";
-import {queryEntityPagination} from "../common/utils";
+import {generateHashByString, queryEntityPagination} from "../common/utils";
 import {RequestException} from "../common/exceptions/request.exception";
 import {BaseService} from "../common/base-module/base.service";
 import {LoggerInterface} from "../common/log/logger.interface";
@@ -27,7 +27,14 @@ export class UserService extends BaseService{
 
   }
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
+
+
+    const cryptPassword = await generateHashByString(createUserDto.password)
+    if(!cryptPassword){throw new RequestException('加密password 失败')}
+
+    console.log('cryptPassword', cryptPassword);
+    createUserDto.password = cryptPassword as string
     const sqlResult = this.userRepository.save(createUserDto)
     return sqlResult
   }
@@ -43,11 +50,22 @@ export class UserService extends BaseService{
 
     const user = await this.userRepository.findOne({
       where: { id },
-      relations: ['books'],
     });
 
     if(!user){
       throw new RequestException('无法根据 userId 找到数据')
+    }
+    return user
+  }
+
+  async getInfoByUsername(username: string){
+
+    const user = await this.userRepository.findOne({
+      where: { username },
+    });
+
+    if(!user){
+      throw new RequestException('无法根据 username 找到数据')
     }
     return user
   }
