@@ -41,7 +41,7 @@ import {UserModule} from "./user/user.module";
       // filePath: './log.txt',
     }),
     LogModule,
-    UserModule
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
