@@ -15,6 +15,7 @@ import {LogModule} from "../common/custom-log/custom-log.module";
     LogModule
   ],
   controllers: [UserController],
-  providers: [UserService]
+  providers: [UserService],
+  exports: [UserService]
 })
 export class UserModule {}

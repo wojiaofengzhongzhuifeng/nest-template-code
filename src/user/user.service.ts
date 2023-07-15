@@ -36,6 +36,7 @@ export class UserService extends BaseService{
     console.log('cryptPassword', cryptPassword);
     createUserDto.password = cryptPassword as string
     const sqlResult = this.userRepository.save(createUserDto)
+
     return sqlResult
   }
 

@@ -15,6 +15,7 @@ import {Book} from "./book/entities/book.entity";
 import {DynamicLoggerModule} from "./common/log/dynamic-logger.module";
 import {LogModule} from "./common/custom-log/custom-log.module";
 import {UserModule} from "./user/user.module";
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import {UserModule} from "./user/user.module";
     }),
     LogModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
