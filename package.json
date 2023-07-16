@@ -39,6 +39,7 @@
     "class-validator": "^0.14.0",
     "dayjs": "^1.11.6",
     "dotenv": "^16.0.3",
+    "jsonwebtoken": "^9.0.1",
     "mysql2": "^2.3.3",
     "node-xlsx": "^0.21.0",
     "passport": "^0.6.0",

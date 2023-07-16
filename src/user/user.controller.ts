@@ -1,8 +1,9 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, Query, Put} from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, Query, Put, UseGuards, Req} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {PaginationPipe} from "../common/pipes/pagination.pipe";
+import {JwtAuthGuard} from "../common/guards/jwt-auth.guard";
 
 @Controller('user')
 export class UserController {
@@ -23,6 +24,15 @@ export class UserController {
   //   return this.userService.findPagination((page), (limit));
   // }
 
+  // /user/info 与 /user/1 可能会重复，所以把特殊的路径放到前面
+  @UseGuards(JwtAuthGuard) // 使用自定义的守卫
+  @Get('info')
+  getUserInfo(@Req() req) {
+    // 请求被守卫允许通过后，你可以从 req.user 中获取解密的用户信息
+    return req.user;
+  }
+
+
   // 获取用户信息
   @Get(':userId')
   async getInfoById(@Param('userId') userId: number){
@@ -38,4 +48,7 @@ export class UserController {
   ){
     return this.userService.updateById(userId, updateUserDto)
   }
+
+
+
 }
