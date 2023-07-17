@@ -16,6 +16,7 @@ import {DynamicLoggerModule} from "./common/log/dynamic-logger.module";
 import {LogModule} from "./common/custom-log/custom-log.module";
 import {UserModule} from "./user/user.module";
 import { AuthModule } from './auth/auth.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { AuthModule } from './auth/auth.module';
     LogModule,
     UserModule,
     AuthModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [
