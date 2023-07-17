@@ -31,20 +31,27 @@ export function isEmpty(value) {
  * @param {string} entityString -
  * @param {number} page - 页码
  * @param {number} limit - 每页数量
+ * @param {Object} conditions - 查询条件，选填
  * @returns {Promise}
  */
 export async function queryEntityPagination<T>(
   repositoryObj: Repository<T>,
   entityString: string,
   page: number,
-  limit: number
+  limit: number,
+  conditions: Partial<T> = {}
 ): Promise<[T[], number]> {
   try {
-    const response = await repositoryObj
+    let query = repositoryObj
       .createQueryBuilder(entityString)
       .skip((page - 1) * limit)
-      .take(limit)
-      .getManyAndCount();
+      .take(limit);
+
+    for (const [key, value] of Object.entries(conditions)) {
+      query = query.andWhere(`${entityString}.${key} = :${key}`, { [key]: value });
+    }
+
+    const response = await query.getManyAndCount();
     return response;
   } catch (error) {
     console.log('请求分页数据出现错误error', error);
