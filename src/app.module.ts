@@ -17,6 +17,7 @@ import {LogModule} from "./common/custom-log/custom-log.module";
 import {UserModule} from "./user/user.module";
 import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
+import {FileUploadModule} from "./common/file-upload/file-upload.module";
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { EmailModule } from './email/email.module';
     UserModule,
     AuthModule,
     EmailModule,
+    FileUploadModule,
   ],
   controllers: [AppController],
   providers: [
