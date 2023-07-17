@@ -10,7 +10,7 @@ export class AppService {
 
   // 正常业务响应情况
   getHello(): Response1<{a: number}> {
-    return { code: MessageCodeMap.ok, data: {a: 1}};
+    return { code: MessageCodeMap.ok, data: {a: 123}};
   }
 
   // 错误响应：客户端出现请求错误
